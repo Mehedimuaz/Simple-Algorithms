@@ -1,0 +1,26 @@
+#include<cstdio>
+#include<cstdlib>
+#include<iostream>
+using namespace std;
+
+long long int big_mod(int b,int p,int m)
+{
+    long long int x=1,y,pow=b%m;
+    while(p){
+        y=p%2;
+        if(y) x=(x*pow)%m;
+        pow=(pow*pow)%m;
+        p/=2;
+    }
+    return x;
+}
+
+int main()
+{
+    long long int b,p,m,i,j;
+    //find b to the power p mod m
+    while(~scanf("%lld %lld %lld",&b,&p,&m)){
+        printf("%lld\n",big_mod(b,p,m));
+    }
+    return 0;
+}
