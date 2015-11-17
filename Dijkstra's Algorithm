@@ -1,0 +1,74 @@
+#include<cstdio>
+#include<queue>
+#include<vector>
+#include<iostream>
+using namespace std;
+
+#define MAX 10000
+#define INF ~(1<<31)
+
+int n,e; //n is number of nodes, e is number of edges
+
+struct edge{
+    int u,w;
+    edge(int a,int b)
+    {
+        u=a;
+        w=b;
+    }
+    bool operator <(const edge &p) const
+    {
+        return w>p.w;
+    }
+};
+
+vector<int>vec[MAX];
+vector<int>cost[MAX];
+int d[MAX];
+int p[MAX];
+
+int dijkstra(int src,int dst)
+{
+    for(int i=0;i<MAX;i++){
+        d[i]=INF;
+        p[i]=-1;
+    }
+    d[src]=0;
+    priority_queue<edge>q;
+    q.push(edge(src,0));
+    while(!q.empty()){
+        edge temp2=q.top();
+        q.pop();
+        int u=temp2.u;
+        if(u==dst) return temp2.w;
+        int sz=vec[u].size();
+        for(int i=0;i<sz;i++){
+            int v=vec[u][i];
+            if(d[v]>(d[u]+cost[u][i])){
+                p[v]=u;
+                d[v]=(d[u]+cost[u][i]);
+                q.push(edge(v,d[v]));
+            }
+        }
+    }
+    return -1;
+}
+
+int main()
+{
+    int i,j,a,b,c,src,dst;
+    scanf("%d %d",&n,&e);
+    for(i=1;i<=e;i++){
+        scanf("%d %d %d",&a,&b,&c);
+        vec[a].push_back(b);
+        vec[b].push_back(a);
+        cost[a].push_back(c);
+        cost[b].push_back(c);
+    }
+    scanf("%d %d",&src,&dst);
+    if(dijkstra(src,dst)==-1){
+        puts("No path");
+    }
+    else printf("%d\n",d[dst]);
+    return 0;
+}
