@@ -1,0 +1,85 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int n,maxi,mini,i_max,i_min;
+int num[40],num1[40];
+char ar[150];
+char ar1[150];
+
+
+
+int find_max(int m)
+{
+    for(int i=0;i<n;i++) if(num[i]==num1[m]) return i;
+}
+
+
+void flip(int j) //swaps the elements from index 0 to j
+{
+    int mid=j/2;
+    for(int i=0;i<=mid;i++){
+        swap(num[i],num[j-i]);
+    }
+}
+
+int conv(int ind) //converts the index for printing
+{
+    return n-ind;
+}
+
+void pancake_sort()
+{
+    //the largest should be in n-1 and the smallest in 0
+    int marker=n-1; //the index upto which (excluding) the array is sorted
+    while(true){
+        if(marker==0) break;
+        int ind=find_max(marker);
+        if(ind==marker){
+            marker--;
+            continue;
+        }
+        else if(ind==0){
+            printf("%d ",conv(marker));
+            flip(marker);
+            marker--;
+        }
+        else{
+            printf("%d ",conv(ind));
+            flip(ind);
+        }
+
+    }
+}
+
+int main()
+{
+    while(gets(ar)!=NULL){
+        n=0;
+        int temp;
+        puts(ar);
+        maxi=0;
+        mini=101;
+        char *p=strtok(ar," ");  //string tokenizer
+        while(p!=NULL){
+            sscanf(p,"%d",&temp);
+            num1[n]=temp;
+            num[n++]=temp;
+            p=strtok(NULL," ");
+        }
+        sort(num1,num1+n);
+        for(int i=0;i<n;i++){
+            if(num[i]==num1[n-1]){
+                maxi=num[i];
+                i_max=i;
+            }
+            if(num[i]==num1[0]){
+                mini=num[i];
+                i_min=i;
+            }
+        }
+
+        pancake_sort();
+        puts("0");
+    }
+    return 0;
+}
